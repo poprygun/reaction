@@ -11,7 +11,7 @@ local.properties
 .settings/
 .loadpath
 
-credentials.yml
+ci/**/credentials-local.yml
 replacements.txt
 target/
 
@@ -20,3 +20,4 @@ build/
 bin/
 _cache
 *.log*
+

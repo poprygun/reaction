@@ -1,0 +1,31 @@
+---
+resources:
+- name: resource-app-repo
+  type: git
+  source:
+    uri: https://github.com:poprygun/reaction.git
+    branch: master
+
+- name: resource-deploy-app
+  type: cf
+  source:
+    api: https://api.local.pcfdev.io
+    username: {{cf-username}}
+    password: {{cf-password}}
+    organization: {{cf-organization}}
+    space: {{cf-space}}
+    skip_cert_check: true
+
+jobs:
+  - name: deploy-local
+    plan:
+    - aggregate:
+      - get: resource-app-repo
+        trigger: true
+    - task: maven-package
+      privileged: true
+      file: resource-app-repo/ci/tasks/maven-package.yml
+    - put: resource-deploy-app
+      params:
+        manifest: resource-app-repo/manifest.yml
+        path: output/resource-app.jar

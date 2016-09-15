@@ -1,0 +1,1 @@
+fly -t reaction set-pipeline -p reaction -c pipeline.yml -l credentials-local.yml
