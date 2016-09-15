@@ -3,3 +3,4 @@ applications:
 - name: reaction-app
   host: ashumilov
   path: target/reaction-app.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
