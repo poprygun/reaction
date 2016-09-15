@@ -3,7 +3,7 @@ resources:
 - name: resource-app-repo
   type: git
   source:
-    uri: https://github.com:poprygun/reaction.git
+    uri: https://github.com/poprygun/reaction.git
     branch: master
 
 - name: resource-deploy-app
