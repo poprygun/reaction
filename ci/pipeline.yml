@@ -28,4 +28,4 @@ jobs:
     - put: resource-deploy-app
       params:
         manifest: resource-app-repo/manifest.yml
-        path: output/resource-app.jar
+        path: output/reaction-app.jar
