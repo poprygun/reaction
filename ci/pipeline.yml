@@ -16,12 +16,22 @@ resources:
     space: {{cf-space}}
     skip_cert_check: true
 
+- name: version
+  type: semver
+  source:
+    driver: git
+    uri: https://github.com/poprygun/reaction.git
+    branch: master
+    file: version
+    initial_version: 1.0.0
+
 jobs:
   - name: deploy-local
     plan:
     - aggregate:
       - get: resource-app-repo
         trigger: true
+    - get: version
     - task: maven-package
       privileged: true
       file: resource-app-repo/ci/tasks/maven-package.yml
