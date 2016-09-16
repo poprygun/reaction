@@ -20,10 +20,11 @@ resources:
   type: semver
   source:
     driver: git
-    uri: https://github.com/poprygun/reaction.git
-    branch: master
-    file: version
+    uri: git@github.com:poprygun/reaction.git
+    branch: version
+    file: number
     initial_version: 1.0.0
+    private_key: {{git-private-key}}
 
 jobs:
   - name: deploy-local
@@ -32,6 +33,7 @@ jobs:
       - get: resource-app-repo
         trigger: true
     - get: version
+      params: {file: version/number}
     - task: maven-package
       privileged: true
       file: resource-app-repo/ci/tasks/maven-package.yml
@@ -39,3 +41,5 @@ jobs:
       params:
         manifest: resource-app-repo/manifest.yml
         path: output/reaction-app.jar
+    - put: version
+      params: {bump: patch}
