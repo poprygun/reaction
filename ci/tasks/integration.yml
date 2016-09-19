@@ -13,10 +13,5 @@ inputs:
 run:
   path: resource-app-repo/ci/tasks/integration.sh
   args: [
-    --input-dir, candidate-release,
-    --output-dir, prepare-integration,
-    --version-file, version/number,
-    --input-manifest, resource-app-repo/manifest.yml,
-    --artifactId, reaction-app,
-    --packaging, jar
+    --input-dir, resource-app-repo
   ]
