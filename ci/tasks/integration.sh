@@ -68,7 +68,7 @@ if [ -z "$packaging" ]; then
   error_and_exit "missing packaging!"
 fi
 
-# copy the war file to the output directory
+# copy the jar file to the output directory
 version=`cat $versionFile`
 artifactName="${artifactId}-${version}.${packaging}"
 
