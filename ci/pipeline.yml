@@ -110,3 +110,12 @@ jobs:
         params: { file: prepare-final/reaction-app-*.jar }
       - put: version
         params: { file: version/number }
+
+  - name: patch
+      serial_groups: [ version ]
+      plan:
+        - get: version
+          passed: [ deploy ]
+          trigger: true
+        - put: version
+          params: { bump: patch, pre: rc }
