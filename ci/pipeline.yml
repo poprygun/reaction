@@ -63,3 +63,25 @@ jobs:
         params: { file: build/reaction-app-*.jar }
       - put: version
         params: { file: version/number }
+
+  - name: integration-test
+    serial: true
+    plan:
+      - get: candidate-release
+        trigger: true
+        passed: [ build-artifact ]
+      - get: resource-app-repo
+        passed: [ build-artifact ]
+      - get: version
+        passed: [ build-artifact ]
+      - task: prepare-integration
+        file: resource-app-repo/ci/tasks/prepare-integration.yml
+        params:
+          CF_MANIFEST_HOST: {{cf-manifest-host}}
+      - put: resource-deploy-app
+        params:
+          manifest: prepare-integration/manifest.yml
+      - task: integration
+        file: resource-app-repo/ci/tasks/integration.yml
+        params:
+          <<: *MAVENPARAMS
