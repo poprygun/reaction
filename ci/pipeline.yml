@@ -54,7 +54,7 @@ jobs:
         passed: [ unit-test ]
         trigger: true
       - get: version
-        params: { pre: rc }
+        params: { bump: patch }
       - task: build
         file: resource-app-repo/ci/tasks/build.yml
         params:
