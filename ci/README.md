@@ -3,8 +3,6 @@ fly -t lite unpause-pipeline --pipeline reaction
 fly -t lite execute -c ci/tasks/prepare-final.yml
 
 fly -t lite trigger-job --job reaction/deploy
-fly -t lite trigger-job --job reaction/deploy
-
 
 fly -t lite trigger-job --job reaction/deploy-local
 fly -t lite destroy-pipeline -p reaction
