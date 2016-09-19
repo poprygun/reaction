@@ -32,7 +32,7 @@ resources:
     uri: git@github.com:poprygun/reaction.git
     branch: version
     file: number
-    initial_version: 1.0.0
+    initial_version: 0.0.1-SNAPSHOT
     private_key: {{git-private-key}}
 
 jobs:
