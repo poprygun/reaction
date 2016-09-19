@@ -6,6 +6,15 @@ resources:
     uri: https://github.com/poprygun/reaction.git
     branch: master
 
+- name: candidate-release
+  type: s3
+  source:
+    bucket: {{s3-bucket-release-candidates}}
+    regexp: reaction-app-(.*).jar
+    access_key_id: {{s3-access-key-id}}
+    secret_access_key: {{s3-secret-access-key}}
+    endpoint: {{s3-endpoint}}
+
 - name: resource-deploy-app
   type: cf
   source:
@@ -37,3 +46,20 @@ jobs:
         params: &MAVENPARAMS
           MAVEN_OPTS: {{maven-opts}}
           MAVEN_CONFIG: {{maven-config}}
+
+  - name: build-artifact
+    serial_groups: [ version ]
+    plan:
+      - get: resource-app-repo
+        passed: [ unit-test ]
+        trigger: true
+      - get: version
+        params: { pre: rc }
+      - task: build
+        file: resource-app-repo/ci/tasks/build.yml
+        params:
+          <<: *MAVENPARAMS
+      - put: candidate-release
+        params: { file: build/reaction-app-*.jar }
+      - put: version
+        params: { file: version/number }
