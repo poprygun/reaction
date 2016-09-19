@@ -18,7 +18,7 @@ resources:
 - name: final-release
   type: s3
   source:
-    bucket: {{s3-bucket-release-candidates}}
+    bucket: {{s3-bucket-release-final}}
     regexp: reaction-app-(.*).jar
     access_key_id: {{s3-access-key-id}}
     secret_access_key: {{s3-secret-access-key}}
