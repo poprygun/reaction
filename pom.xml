@@ -19,12 +19,23 @@
 	</parent>
 
 	<properties>
+		<finalName>reaction-app</finalName>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<reactor.version>2.0.7.RELEASE</reactor.version>
 		<spring.version>5.0.0.M1</spring.version>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>ci</id>
+			<properties>
+				<versionNumber>${project.version}</versionNumber>
+				<finalName>${project.artifactId}-${versionNumber}</finalName>
+			</properties>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -73,7 +84,7 @@
 	</dependencies>
 
 	<build>
-		<!--<finalName>${project.name}-app</finalName>-->
+		<finalName>${finalName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
