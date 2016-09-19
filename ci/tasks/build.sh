@@ -59,6 +59,8 @@ artifactName="${artifactId}-${version}.${packaging}"
 cd $inputDir
 ./mvnw clean package -DversionNumber=$version
 
+echo "--------------------->$version"
+
 # Copy war file to concourse output folder
 cd ..
 cp $inputDir/target/$artifactName $outputDir/$artifactName
