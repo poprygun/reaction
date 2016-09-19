@@ -112,10 +112,10 @@ jobs:
         params: { file: version/number }
 
   - name: patch
-      serial_groups: [ version ]
-      plan:
-        - get: version
-          passed: [ deploy ]
-          trigger: true
-        - put: version
-          params: { bump: patch, pre: rc }
+    serial_groups: [ version ]
+    plan:
+      - get: version
+        passed: [ deploy ]
+        trigger: true
+      - put: version
+        params: { bump: patch, pre: rc }
