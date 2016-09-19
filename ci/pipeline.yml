@@ -27,19 +27,13 @@ resources:
     private_key: {{git-private-key}}
 
 jobs:
-  - name: deploy-local
+  - name: unit-test
+    public: true
     plan:
-    - aggregate:
       - get: resource-app-repo
         trigger: true
-    - get: version
-      params: {file: version/number}
-    - task: maven-package
-      privileged: true
-      file: resource-app-repo/ci/tasks/maven-package.yml
-    - put: resource-deploy-app
-      params:
-        manifest: resource-app-repo/manifest.yml
-        path: output/reaction-app.jar
-    - put: version
-      params: {bump: patch}
+      - task: unit
+        file: resource-app-repo/ci/tasks/unit.yml
+        params: &MAVENPARAMS
+          MAVEN_OPTS: {{maven-opts}}
+          MAVEN_CONFIG: {{maven-config}}

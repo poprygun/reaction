@@ -1,0 +1,21 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: java
+    tag: '8'
+
+params:
+  MAVEN_OPTS:
+  MAVEN_CONFIG:
+
+inputs:
+  - name: resource-app-repo
+
+run:
+  path: resource-app-repo/ci/tasks/unit.sh
+  args: [
+    --input-dir, resource-app-repo
+  ]
