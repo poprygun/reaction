@@ -15,6 +15,15 @@ resources:
     secret_access_key: {{s3-secret-access-key}}
     endpoint: {{s3-endpoint}}
 
+- name: final-release
+  type: s3
+  source:
+    bucket: {{s3-bucket-release-candidates}}
+    regexp: reaction-app-(.*).jar
+    access_key_id: {{s3-access-key-id}}
+    secret_access_key: {{s3-secret-access-key}}
+    endpoint: {{s3-endpoint}}
+
 - name: resource-deploy-app
   type: cf
   source:
@@ -85,3 +94,19 @@ jobs:
         file: resource-app-repo/ci/tasks/integration.yml
         params:
           <<: *MAVENPARAMS
+
+  - name: deploy
+    serial_groups: [ version ]
+    plan:
+      - get: candidate-release
+        passed: [ integration-test ]
+      - get: resource-app-repo
+        passed: [ integration-test ]
+      - get: version
+        params: { bump: final }
+      - task: prepare-final
+        file: resource-app-repo/ci/tasks/prepare-final.yml
+      - put: final-release
+        params: { file: prepare-final/reaction-app-*.jar }
+      - put: version
+        params: { file: version/number }
