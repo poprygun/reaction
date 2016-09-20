@@ -11,6 +11,7 @@ public class ReactionApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		throw new RuntimeException("Just provoking an alert");
 	}
 
 }

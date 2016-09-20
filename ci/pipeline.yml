@@ -44,78 +44,98 @@ resources:
     initial_version: 0.0.1-SNAPSHOT
     private_key: {{git-private-key}}
 
+- name: email-resource-source
+  type: git
+  source:
+    uri: https://github.com/pivotal-cf/email-resource
+    branch: master
+
+- name: send-an-email
+  type: email
+  source:
+    smtp:
+      host: {{smtp-host}}
+      port: {{smtp-port}}
+      username: {{smtp-username}}
+      password: {{smtp-password}}
+    from: {{email-from}}
+    to: [ {{email-to}} ]
+
 jobs:
-  - name: unit-test
-    public: true
-    plan:
-      - get: resource-app-repo
-        trigger: true
-      - task: unit
-        file: resource-app-repo/ci/tasks/unit.yml
-        params: &MAVENPARAMS
-          MAVEN_OPTS: {{maven-opts}}
-          MAVEN_CONFIG: {{maven-config}}
+- name: unit-test
+  public: true
+  plan:
+    - get: resource-app-repo
+      trigger: true
+    - task: unit
+      file: resource-app-repo/ci/tasks/unit.yml
+      params: &MAVENPARAMS
+        MAVEN_OPTS: {{maven-opts}}
+        MAVEN_CONFIG: {{maven-config}}
+      on_failure:
+        task: alert
+        file: resource-app-repo/ci/tasks/alert.yml
 
-  - name: build-artifact
-    serial_groups: [ version ]
-    plan:
-      - get: resource-app-repo
-        passed: [ unit-test ]
-        trigger: true
-      - get: version
-        params: { bump: patch }
-      - task: build
-        file: resource-app-repo/ci/tasks/build.yml
-        params:
-          <<: *MAVENPARAMS
-      - put: candidate-release
-        params: { file: build/reaction-app-*.jar }
-      - put: version
-        params: { file: version/number }
+- name: build-artifact
+  serial_groups: [ version ]
+  plan:
+    - get: resource-app-repo
+      passed: [ unit-test ]
+      trigger: true
+    - get: version
+      params: { bump: patch }
+    - task: build
+      file: resource-app-repo/ci/tasks/build.yml
+      params:
+        <<: *MAVENPARAMS
+    - put: candidate-release
+      params: { file: build/reaction-app-*.jar }
+    - put: version
+      params: { file: version/number }
 
-  - name: integration-test
-    serial: true
-    plan:
-      - get: candidate-release
-        trigger: true
-        passed: [ build-artifact ]
-      - get: resource-app-repo
-        passed: [ build-artifact ]
-      - get: version
-        passed: [ build-artifact ]
-      - task: prepare-integration
-        file: resource-app-repo/ci/tasks/prepare-integration.yml
-        params:
-          CF_MANIFEST_HOST: {{cf-manifest-host}}
-      - put: resource-deploy-app
-        params:
-          manifest: prepare-integration/manifest.yml
-      - task: integration
-        file: resource-app-repo/ci/tasks/integration.yml
-        params:
-          <<: *MAVENPARAMS
+- name: integration-test
+  serial: true
+  plan:
+    - get: candidate-release
+      trigger: true
+      passed: [ build-artifact ]
+    - get: resource-app-repo
+      passed: [ build-artifact ]
+    - get: version
+      passed: [ build-artifact ]
+    - task: prepare-integration
+      file: resource-app-repo/ci/tasks/prepare-integration.yml
+      params:
+        CF_MANIFEST_HOST: {{cf-manifest-host}}
+    - put: resource-deploy-app
+      params:
+        manifest: prepare-integration/manifest.yml
+    - task: integration
+      file: resource-app-repo/ci/tasks/integration.yml
+      params:
+        <<: *MAVENPARAMS
 
-  - name: deploy
-    serial_groups: [ version ]
-    plan:
-      - get: candidate-release
-        passed: [ integration-test ]
-      - get: resource-app-repo
-        passed: [ integration-test ]
-      - get: version
-        params: { bump: final }
-      - task: prepare-final
-        file: resource-app-repo/ci/tasks/prepare-final.yml
-      - put: final-release
-        params: { file: prepare-final/reaction-app-*.jar }
-      - put: version
-        params: { file: version/number }
+- name: deploy
+  serial_groups: [ version ]
+  plan:
+    - get: candidate-release
+      passed: [ integration-test ]
+    - get: resource-app-repo
+      passed: [ integration-test ]
+    - get: version
+      params: { bump: final }
+    - task: prepare-final
+      file: resource-app-repo/ci/tasks/prepare-final.yml
+    - put: final-release
+      params: { file: prepare-final/reaction-app-*.jar }
+    - put: version
+      params: { file: version/number }
 
-  - name: patch
-    serial_groups: [ version ]
-    plan:
-      - get: version
-        passed: [ deploy ]
-        trigger: true
-      - put: version
-        params: { bump: patch, pre: rc }
+- name: patch
+  serial_groups: [ version ]
+  plan:
+    - get: version
+      passed: [ deploy ]
+      trigger: true
+    - put: version
+      params: { bump: patch, pre: rc }
