@@ -79,9 +79,9 @@ jobs:
         params: &MAVENPARAMS
           MAVEN_OPTS: {{maven-opts}}
           MAVEN_CONFIG: {{maven-config}}
-      on_success:
       - task: prep-sha-email
         file: resource-app-repo/ci/tasks/prep-sha-email.yml
+      on_success:
         put: send-an-email
         params:
           subject: prep-sha-email/generated-subject
