@@ -72,9 +72,21 @@ jobs:
       params: &MAVENPARAMS
         MAVEN_OPTS: {{maven-opts}}
         MAVEN_CONFIG: {{maven-config}}
+      on_success:
+        put: send-an-email
+        params:
+          subject: 'test email success'
+          body: 'some success message'
       on_failure:
-        task: alert
-        file: resource-app-repo/ci/tasks/alert.yml
+        put: send-an-email
+        params:
+          subject: 'test email fail'
+          body: 'some failed message'
+#      on_failure:
+#        task: alert
+#        file: resource-app-repo/ci/tasks/alert.yml
+#        params:
+#          MESSAGE: 'here we go again'
 
 - name: build-artifact
   serial_groups: [ version ]
