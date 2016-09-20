@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-uname -a
+echo "this is just a sample alert"
