@@ -38,5 +38,6 @@ echo -e "Email from unit test on $(date)" > $output_subject_file
 echo -e "Some text to add to mail body" > $output_body_file
 
 echo '-------------->'
-ls -l email-out/
+cat $output_subject_file
 echo '-------------->'
+cat $output_body_file
