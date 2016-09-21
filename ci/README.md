@@ -1,5 +1,9 @@
 # Simple concourse pipeline running of mvn
 
+### Version
+Version of the build is traced in the [version branch - file number](https://github.com/poprygun/reaction/blob/version/number)
+and incremented with every build.
+
 ### To push to pcf dev
 ```bash
 fly -t lite trigger-job --job reaction/deploy-local
