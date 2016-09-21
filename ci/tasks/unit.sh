@@ -1,4 +1,5 @@
 #!/bin/sh
+set -exu
 
 inputDir=
 
@@ -27,19 +28,8 @@ fi
 
 cd $inputDir
 
-mkdir email-out
-
-./mvnw clean test --log-file email-out/log.out
-
 output_body_file=email-out/$output_body_file
 output_subject_file=email-out/$output_subject_file
 
-echo -e "Email from unit test on $(date)" > $output_subject_file
-echo -e "Some text to add to mail body" > $output_body_file
-
-echo '-------------->'
-pwd
-echo '-------------->'
-cat $output_subject_file
-echo '-------------->'
-cat $output_body_file
+./mvnw clean test --log-file $output_body_file
+echo -e "This is the build unit test result" > $output_subject_file
