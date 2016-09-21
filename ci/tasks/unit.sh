@@ -26,9 +26,8 @@ if [ ! -d "$inputDir" ]; then
   error_and_exit "missing input directory: $inputDir"
 fi
 
-echo -e "Email resource demo on $(date)" > email-out/$output_subject_file
+echo "Unit test build result $(date)" > email-out/$output_subject_file
 
 cd $inputDir
 
 ./mvnw clean test --log-file ../email-out/$output_body_file
-ls -l ../email-out
