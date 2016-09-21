@@ -14,6 +14,9 @@ params:
 inputs:
   - name: resource-app-repo
 
+outputs:
+  - name: logs-out
+
 run:
   path: resource-app-repo/ci/tasks/unit.sh
   args: [

@@ -27,4 +27,6 @@ fi
 
 cd $inputDir
 
-./mvnw clean test
+mkdir logs-out
+
+./mvnw clean test --log-file logs-out/log.out

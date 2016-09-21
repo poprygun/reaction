@@ -53,7 +53,7 @@ resources:
       username: {{smtp-username}}
       password: {{smtp-password}}
     from: {{email-from}}
-    to: [ {{email-to}} ]
+    to: [ poprygun@hotmail.com ]
 
 resource_types:
   - name: email
@@ -79,12 +79,12 @@ jobs:
         put: send-an-email
         params:
           subject: email-out/generated-subject
-          body: email-out/generated-body
+          body: logs-out/log.txt
       on_failure:
         put: send-an-email
         params:
           subject: email-out/generated-subject
-          body: email-out/generated-body
+          body: logs-out/log.txt
 #      on_failure:
 #        task: alert
 #        file: resource-app-repo/ci/tasks/alert.yml
