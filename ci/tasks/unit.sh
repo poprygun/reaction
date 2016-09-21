@@ -27,9 +27,9 @@ fi
 
 cd $inputDir
 
-mkdir logs-out
+mkdir email-out
 
-./mvnw clean test --log-file logs-out/log.out
+./mvnw clean test --log-file email-out/log.out
 
 output_body_file=email-out/$output_body_file
 output_subject_file=email-out/$output_subject_file
