@@ -68,8 +68,8 @@ jobs:
     - do:
       - get: resource-app-repo
         trigger: true
-      - task: prep-sha-email
-        file: resource-app-repo/ci/tasks/prep-sha-email.yml
+#      - task: prep-sha-email
+#        file: resource-app-repo/ci/tasks/prep-sha-email.yml
       - task: unit
         file: resource-app-repo/ci/tasks/unit.yml
         params: &MAVENPARAMS
@@ -79,12 +79,12 @@ jobs:
         put: send-an-email
         params:
           subject: email-out/generated-subject
-          body: logs-out/log.txt
+          body: email-out/generated-body
       on_failure:
         put: send-an-email
         params:
           subject: email-out/generated-subject
-          body: logs-out/log.txt
+          body: email-out/generated-body
 #      on_failure:
 #        task: alert
 #        file: resource-app-repo/ci/tasks/alert.yml

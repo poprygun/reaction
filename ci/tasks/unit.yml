@@ -10,12 +10,14 @@ image_resource:
 params:
   MAVEN_OPTS:
   MAVEN_CONFIG:
+  output_subject_file: generated-subject
+  output_body_file: generated-body
 
 inputs:
   - name: resource-app-repo
 
 outputs:
-  - name: logs-out
+  - name: email-out
 
 run:
   path: resource-app-repo/ci/tasks/unit.sh

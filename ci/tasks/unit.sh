@@ -30,3 +30,9 @@ cd $inputDir
 mkdir logs-out
 
 ./mvnw clean test --log-file logs-out/log.out
+
+output_body_file=email-out/$output_body_file
+output_subject_file=email-out/$output_subject_file
+
+echo -e "Email from unit test on $(date)" > $output_subject_file
+echo -e "Some text to add to mail body" > $output_body_file
