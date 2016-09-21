@@ -26,7 +26,7 @@ if [ ! -d "$inputDir" ]; then
   error_and_exit "missing input directory: $inputDir"
 fi
 
-echo -e "Email resource demo on $(date)" > ../email-out/$output_subject_file
+echo -e "Email resource demo on $(date)" > email-out/$output_subject_file
 
 cd $inputDir
 
